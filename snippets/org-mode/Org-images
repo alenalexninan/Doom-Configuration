@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: org-images
+# key: image_width
+# condition: t
+# --
+#+attr_org: :width ${100%}

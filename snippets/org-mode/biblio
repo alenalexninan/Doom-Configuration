@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ref_end
+# key: ref_end
+# condition: t
+# --
+#+print_bibliography:

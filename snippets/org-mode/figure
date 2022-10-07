@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: figure
+# key: fig
+# uuid: fig
+# --
+#+caption: ${1:caption}
+#+attr_latex: ${2:scale=0.75}
+#+attr_org: :width ${3:100}
+#+label: fig:${4:label}

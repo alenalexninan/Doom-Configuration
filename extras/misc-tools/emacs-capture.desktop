@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Web Capture
+Exec=/home/aaninan/.scripts/emacs-capture %u
+Comment=Capture the web into org
+Icon=emacs
+Type=Application
+Terminal=false
+MimeType=x-scheme-handler/org-protocol;

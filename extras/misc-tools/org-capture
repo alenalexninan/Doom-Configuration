@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+# Open an org-capture popup frame from the shell. This opens a temporary emacs
+# daemon if emacs isn't already running.
+#
+# Usage: org-capture [-k KEY] [MESSAGE]
+# Examples:
+#   org-capture -k n "To the mind that is still, the whole universe surrenders."
+
+set -e
+
+cleanup() {
+    /opt/homebrew/bin/emacsclient --eval '(let (kill-emacs-hook) (kill-emacs))'
+}
+
+change_focus() {
+    /opt/homebrew/bin/emacsclient -n -e "(select-frame-set-input-focus (selected-frame))" >/dev/null
+}
+
+if [ $daemon ]; then
+    /opt/homebrew/bin/emacsclient -a "" \
+        -c -F '((name . "org-capture") (width . 70) (height . 25) (transient . t))' \
+        -e "(+org-capture/open-frame \"$str\" ${key:-nil})" &&
+        change_focus
+else
+    /opt/homebrew/bin/emacsclient -a "" \
+        -e "(+org-capture/open-frame \"$str\" ${key:-nil})" &&
+        change_focus
+fi

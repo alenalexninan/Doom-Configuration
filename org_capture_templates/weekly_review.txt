@@ -1,0 +1,17 @@
+** [ ] Weekly review %u [/]
+SCHEDULED: %t
+:PROPERTIES:
+:END:
+*** [ ] Mail review [0/4]
++ [ ] Inbox review%?
++ [ ] Pending mails
++ [ ] Scheduling pending
+*** [ ] Progress completion and pending personal tasks
+*** [ ] Progress completion projects
+*** [ ] Assign priorities for pending actions
+*** [ ] Assign dates for pending actions
+*** [ ] Investment review
+*** [ ] Relationship review [0/3]
++ [ ] Birthday
++ [ ] Anniversary
++ [ ] Calls

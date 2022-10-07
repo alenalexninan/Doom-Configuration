@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Anki note type
+# key: ankitype
+# condition: t
+# --
+:ANKI_NOTE_TYPE: ${Basic (and reversed card)}

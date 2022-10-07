@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Hugo
+# key: hugo
+# condition: t
+# --
+#+HUGO_BASE_DIR: {$1:../}
+#+HUGO_SECTION: {$2:./}
+#+HUGO_AUTO_SET_LASTMOD: t
+#+DATE: <>
+#+HUGO_TAGS: {$3:FA}
+#+HUGO_CATEGORIES:{$4:FA}
+#+HUGO_MENU:
+#+HUGO_DRAFT:true

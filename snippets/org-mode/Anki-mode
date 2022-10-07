@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: anki-init
+# uuid:
+# key: ankiin
+# condition: t
+# --
+:PROPERTIES:
+:ANKI_DECK: ${Default}
+:ANKI_NOTE_TYPE: ${Basic (and reversed card)}
+:END:

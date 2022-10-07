@@ -1,0 +1,36 @@
+** Monthly review %u [/]
+SCHEDULED: %t
+:PROPERTIES:
+:END:
+*** TODO Mail review [0/4]
++ [ ] Inbox review
++ [ ] Pending actions
++ [ ] Logging completion
++ [ ] Scheduling pending
+*** TODO Progress completion and pending personal tasks
+*** TODO Progress completion projects
+*** TODO Review Stalled projects
+*** TODO Assign priorities for pending actions
+*** TODO Assign dates for pending actions
+*** TODO Bill review [0/5]
++ [ ] Credit card bill
++ [ ] Rent
++ [ ] Water bill
++ [ ] Electricity bill
++ [ ] Internet bill
++ [ ] Gas bill
+*** TODO Savings review
+*** TODO Investment review
+*** TODO Tax review
+*** TODO Relationship review [0/3]
++ [ ] Birthday
++ [ ] Anniversary
++ [ ] Calls
+*** TODO Organise files [0/7]
++ [ ] Desktop
++ [ ] Download
++ [ ] Documents
++ [ ] Music
++ [ ] Videos
++ [ ] Photos
++ [ ] Home

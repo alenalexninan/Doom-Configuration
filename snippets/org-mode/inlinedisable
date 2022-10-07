@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Disable Inline
+# key: dinline
+# uuid: dinline
+# --
+#+STARTUP: noinlineimages

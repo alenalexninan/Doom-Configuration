@@ -1,0 +1,43 @@
+#+TITLE: Org Capture
+* References
+[[https://www.reddit.com/r/emacs/comments/ai7hf0/does_anyone_here_still_use_orgprotocol/][Does anyone here still use org-protocol? : emacs]][[https://www.reddit.com/r/emacs/comments/ai7hf0/does_anyone_here_still_use_orgprotocol/][Does anyone here still use org-protocol? : emacs]]
+
+* Create handler for org-protocol urls
+
+We want a small emacs window centred on the screen.
+
+#+BEGIN_SRC sh :tangle ~/.scripts/emacs-capture :shebang "#!/bin/sh"
+emacsclient -c  -F "((name . \"emacs-capture\") (height . 20) (width . 80) (left . 502) (top . 252) (user-position . t) (menu-bar-lines . 0))" "$@"
+#+END_SRC
+
+#+RESULTS:
+: Waiting for Emacs...
+
+The =left= and =top= cells do the centering for a 1920x1080
+display.  For other sizes, =xwininfo= is yr friend: left =
+(x-screen - x-window)/2 and so on.
+
+* Register handler for org-protocol
+
+#+BEGIN_SRC sh :tangle ~/.local/share/applications/emacs-capture.desktop
+[Desktop Entry]
+Name=Web Capture
+Exec=/home/aaninan/.scripts/emacs-capture %u
+Comment=Capture the web into org
+Icon=emacs
+Type=Application
+Terminal=false
+MimeType=x-scheme-handler/org-protocol;
+#+END_SRC
+
+#+RESULTS:
+
+After installing this, you need to evaluate (with =C-c C-c=)
+the following to register the mime-type with the OS:
+
+#+NAME: update-block
+#+BEGIN_SRC sh
+update-desktop-database ~/.local/share/applications
+#+END_SRC
+
+#+RESULTS: update-block

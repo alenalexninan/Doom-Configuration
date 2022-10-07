@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Capture
+Exec=/home/aaninan/.scripts/org-capture %u
+Comment=Capture the web into org
+Icon=emacs
+Type=Application
+Terminal=false

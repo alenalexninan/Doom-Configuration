@@ -1,0 +1,13 @@
+#+filetags: :REVIEWING:
+#+PROPERTY: ANKI_DECK Default
+Time-stamp: "2022-05-30 13:03:28 aaninan"
+#+STARTUP: content
+#+STARTUP: indent
+#+STARTUP: align
+#+ARCHIVE: %s_done::
+#+OPTIONS: num:0 toc:nil
+#+STARTUP: hidebloacks
+#+STARTUP: hidestars
+#+STARTUP: latexpreview
+#+EXPORT_FILE_NAME: Notes
+#+EXCLUDE_TAGS: noexport

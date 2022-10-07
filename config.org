@@ -1,0 +1,727 @@
+#+TITLE: Configurations for Doom Emacs
+#+STARTUP: content
+
+This is the configuration in Doom Emacs that I use. I use Emacs as an IDE and as my second brain. It's an extensively customizable and extendable tool which help with
+* Initial configurations
+#+begin_src emacs-lisp
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+
+;; Place your private configuration here! Remember, you do not need to run 'doom
+;; sync' after modifying this file!
+
+
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+(setq user-full-name "Alen Alex Ninan"
+      user-mail-address "alenishere@gmail.com")
+
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package!' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+;;
+;; To get information about any of these functions/macros, move the cursor over
+;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
+;;
+;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+;; they are implemented.
+#+end_src
+
+* Directory management
+All directory and file configurations used for
+#+begin_src emacs-lisp
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(when IS-MAC
+  ;; Org directories for configuration
+  (setq org-roam-directory (file-truename "~/Dropbox/Org/roam/")
+        org-directory "~/Dropbox/Org"))
+
+(when IS-LINUX
+  (setq org-roam-directory (file-truename "~/Dropbox/Org/roam/")
+        org-directory "~/Dropbox/Org"))
+
+(when IS-WINDOWS
+  (setq org-roam-directory (file-truename "~/Dropbox/Org/roam/")
+        org-directory "~/Dropbox/Org"))
+#+end_src
+* Look and feel
+#+begin_src emacs-lisp
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type 'relative)
+
+;; Better image for doom dashboard
+(setq fancy-splash-image "~/.doom.d/icon.png")
+#+end_src
+** Fonts
+#+begin_src emacs-lisp
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+(setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 15)
+      doom-unicode-font (font-spec :family "Fira Mono" :size 15))
+
+;; Latin
+(set-fontset-font t 'latin "Noto Sans")
+
+;; East Asia: 你好, 早晨, こんにちは, 안녕하세요
+;;
+;; Make sure you use the right font. See
+;; https://www.google.com/get/noto/help/cjk/.
+;;
+;; This font requires "Regular". Other Noto fonts dont.
+;; ¯\_(ツ)_/¯
+(set-fontset-font t 'han "Noto Sans CJK SC Regular")
+(set-fontset-font t 'kana "Noto Sans CJK JP Regular")
+(set-fontset-font t 'hangul "Noto Sans CJK KR Regular")
+(set-fontset-font t 'cjk-misc "Noto Sans CJK KR Regular")
+
+;; South East Asia: ជំរាបសួរ, ສະບາຍດີ, မင်္ဂလာပါ, สวัสดีครับ
+(set-fontset-font t 'khmer "Noto Sans Khmer")
+(set-fontset-font t 'lao "Noto Sans Lao")
+(set-fontset-font t 'burmese "Noto Sans Myanmar")
+(set-fontset-font t 'thai "Noto Sans Thai")
+
+;; Africa: ሠላም
+(set-fontset-font t 'ethiopic "Noto Sans Ethiopic")
+
+;; Middle/Near East: שלום, السّلام عليكم
+(set-fontset-font t 'hebrew "Noto Sans Hebrew")
+(set-fontset-font t 'arabic "Noto Sans Arabic")
+
+;;  South Asia: નમસ્તે, नमस्ते, ನಮಸ್ಕಾರ, നമസ്കാരം, ଶୁଣିବେ,
+;;              ආයුබෝවන්, வணக்கம், నమస్కారం, བཀྲ་ཤིས་བདེ་ལེགས༎
+(set-fontset-font t 'gujarati "Noto Sans Gujarati")
+(set-fontset-font t 'devanagari "Noto Sans Devanagari")
+(set-fontset-font t 'kannada "Noto Sans Kannada")
+(set-fontset-font t 'malayalam "Noto Sans Malayalam")
+(set-fontset-font t 'oriya "Noto Sans Oriya")
+(set-fontset-font t 'sinhala "Noto Sans Sinhala")
+(set-fontset-font t 'tamil "Noto Sans Tamil")
+(set-fontset-font t 'telugu "Noto Sans Telugu")
+(set-fontset-font t 'tibetan "Noto Sans Tibetan")
+#+end_src
+** Themes
+*** Modus themes
+#+begin_src emacs-lisp
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+(use-package modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-region '(bg-only no-extend))
+
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
+  :config
+  ;; Load the theme of your choice:
+  ;; (setq doom-theme 'modus-themes-load-vivendi)
+  (setq doom-theme 'modus-vivendi)
+
+  ;; Defining PDF-tools backdrop based on modus theme used
+  (defun my-pdf-tools-backdrop ()
+    (face-remap-add-relative
+     'default
+     `(:background ,(modus-themes-color 'bg-alt))))
+
+  (defun my-pdf-tools-midnight-mode-toggle ()
+    (when (derived-mode-p 'pdf-view-mode)
+      (if (eq (car custom-enabled-themes) 'modus-vivendi)
+          (pdf-view-midnight-minor-mode 1)
+        (pdf-view-midnight-minor-mode -1))
+      (my-pdf-tools-backdrop)))
+
+  (defun my-pdf-tools-themes-toggle ()
+    (mapc
+     (lambda (buf)
+       (with-current-buffer buf
+         (my-pdf-tools-midnight-mode-toggle)))
+     (buffer-list)))
+
+  (add-hook 'pdf-tools-enabled-hook #'my-pdf-tools-midnight-mode-toggle)
+  (add-hook 'modus-themes-after-load-theme-hook #'my-pdf-tools-themes-toggle)
+
+  :bind ("<f5>" . modus-themes-toggle))
+#+end_src
+*** Enabling themes
+#+begin_src emacs-lisp
+(setq doom-theme 'modus-vivendi)
+#+end_src
+** Parenthesis
+Highlight matching paranthesis
+#+begin_src emacs-lisp
+(use-package! paren
+  :config
+  (setq show-paren-style 'parenthesis)
+  (show-paren-mode +1))
+#+end_src
+** Reference management
+*** Directories and files
+#+begin_src emacs-lisp
+;; ;; Org reference configuration
+;; (defconst my/pdf-library-paths (list (file-truename (concat org-roam-directory "/bibtex-pdfs")))) ; Main PDFs directory
+;; (defconst my/bib-notes-dir (list (file-truename (concat org-roam-directory "/notes")))) ; I use org-roam to manage all my notes, including bib notes.
+;; ;; First of everything is important
+;; (defconst my/main-bib-notes-dir (nth 0 my/bib-notes-dir))       ; main notes directory
+;; (defconst my/main-bib-library (nth 0 my/bib-libraries))         ; The main db is always the first
+#+end_src
+* Org
+** Look and Fell
+*** Org-modern
+#+begin_src emacs-lisp
+(use-package! org-modern
+  :config
+  ;; Add frame borders and window dividers
+  ;; (modify-all-frames-parameters
+  ;;  '((right-divider-width . 40)
+  ;;    (internal-border-width . 40)))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background))
+
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Org-modern stars
+   org-modern-star '("◈" "◇")
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  ;; Globally enabling org-modern
+  (global-org-modern-mode))
+#+end_src
+** Additional modules
+#+begin_src emacs-lisp
+(after! org
+  ;; Additional Org modules
+  (add-to-list 'org-modules 'org-checklist)
+  (add-to-list 'org-modules 'org-habit)
+  (add-to-list 'org-modules 'org-crypt))
+#+end_src
+** Capture
+#+begin_src emacs-lisp
+(after! org
+  (setq org-capture-templates
+        '(("t" "Personal todo" entry
+           (file+headline +org-capture-todo-file "Inbox")
+           "* TODO %?\n%i\n%a" :prepend t)
+          ("i" "Personal idea" entry
+           (file+headline +org-capture-todo-file "Inbox")
+           "* IDEA %?\n%i\n%a" :prepend t)
+          ("n" "Personal notes" entry
+           (file +org-capture-notes-file)
+           "* %u %?\n%i\n%a" :prepend t)
+          ("j" "Journal" entry
+           (file +org-capture-journal-file)
+           "* %U %?\n%i\n%a" :prepend t)
+
+          ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
+          ;; {todo,notes,changelog}.org file is found in a parent directory.
+          ;; Uses the basename from `+org-capture-todo-file',
+          ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
+          ("o" "Templates for projects")
+          ("ot" "Project-local todo" entry  ; {project-root}/todo.org
+           (file+headline +org-capture-project-todo-file "Inbox")
+           "* IDEA %?\n%i\n%a" :prepend t)
+          ("on" "Project-local notes" entry  ; {project-root}/notes.org
+           (file +org-capture-project-notes-file)
+           "* %U %?\n%i\n%a" :prepend t)
+          ("oc" "Project-local changelog" entry  ; {project-root}/changelog.org
+           (file+headline +org-capture-project-changelog-file "Unreleased")
+           "* %U %?\n%i\n%a" :prepend t)
+
+          ;; Will use {org-directory}/{+org-capture-projects-file} and store
+          ;; these under {ProjectName}/{Tasks,Notes,Changelog} headings. They
+          ;; support `:parents' to specify what headings to put them under, e.g.
+          ;; :parents ("Projects")
+          ("p" "Centralized templates for projects")
+          ("pt" "Project todo" entry
+           (function +org-capture-central-project-todo-file)
+           "* IDEA %?\n %i\n %a"
+           :heading "Inbox"
+           :prepend nil)
+          ("pn" "Project notes" entry
+           (function +org-capture-central-project-notes-file)
+           "* %U %?\n %i\n %a"
+           :heading "Notes"
+           :prepend t)
+          ("pc" "Project changelog" entry
+           (function +org-capture-central-project-changelog-file)
+           "* %U %?\n %i\n %a"
+           :heading "Changelog"
+           :prepend t)))
+  (add-to-list 'org-capture-templates
+               '("c" "Org-protocol"))
+  ;; Firefox
+  (add-to-list 'org-capture-templates
+               '("cp" "Protocol" entry
+                 (file+headline +org-capture-notes-file "Web")
+                 "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?"
+                 :prepend t
+                 :kill-buffer t))
+  ;; (add-to-list 'org-capture-templates
+  ;;              '("cl" "Protocol Link" entry
+  ;;                (file+headline +org-capture-notes-file "Web")
+  ;;                "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
+  ;;                :prepend t
+  ;;                :kill-buffer t))
+  (add-to-list 'org-capture-templates
+               '("cw" "Article"
+                 entry (file+headline +org-capture-notes-file "Web")
+                 "* %a\n%U\n%:initial\n\n"
+                 :immediate-finish t)
+               )
+  (defvar +org-capture-review-file "review/review.org"
+    "Default target for storing review files.
+Is relative to `org-directory', unless it is absolute")
+  (setq +org-capture-review-file
+        (expand-file-name +org-capture-review-file org-directory))
+  (add-to-list 'org-capture-templates
+               '("v" "Review"))
+  (add-to-list 'org-capture-templates
+               '("vw" "Weekly review" entry
+                 (file+headline +org-capture-review-file "Weekly")
+                 (file "~/.doom.d/org_capture_templates/weekly_review.txt")
+                 )
+               )
+  (add-to-list 'org-capture-templates
+               '("vm" "Monthly review" entry
+                 (file+headline +org-capture-review-file "Monthly")
+                 (file "~/.doom.d/org_capture_templates/monthly_review.txt")
+                 )
+               )
+  ;; Setting default capture template
+  (setq org-protocol-default-template-key "cw")
+
+  ;; for emacs capture
+  ;; (defun transform-square-brackets-to-round-ones(string-to-transform)
+  ;;   "Transforms [ into ( and ] into ), other chars left unchanged."
+  ;;   (concat
+  ;;    (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
+  ;;   )
+  )
+#+end_src
+** Roam
+Using org-roam for the data management and as my second brain.
+#+begin_src emacs-lisp
+(after! org-roam
+  ;; (setq org-roam-db-location (concat org-roam-directory "org-roam.db"))
+  (setq org-roam-dailies-directory "daily/")
+  ;; (setq org-roam-mode-sections
+  ;;     '((org-roam-backlinks-section :unique t)
+  ;;       org-roam-reflinks-section))
+  )
+#+end_src
+*** Capture
+#+begin_src emacs-lisp
+
+#+end_src
+*** UI for graphing links
+#+begin_src emacs-lisp
+;; Org-roam-ui
+;; ------------------------------------------------------------------------------
+(use-package! org-roam-ui
+  :after org-roam
+  ;; or :after org
+  ;;    :hook
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+  (map! (:map org-mode-map
+         :localleader
+         :prefix ("mu" . "UI")
+         "o" #'org-roam-ui-mode
+         "f" #'org-roam-ui-follow-mode)))
+#+end_src
+** Agenda
+#+begin_src emacs-lisp
+;;; Agenda view custom commands
+(map! :after org-agenda
+      :map org-agenda-mode-map
+      :m "C-SPC" #'org-agenda-show-and-scroll-up
+      :localleader
+      (:prefix ("v" . "views")
+               "y" #'org-agenda-year-view
+               "m" #'org-agenda-month-view
+               "d" #'org-agenda-day-view))
+#+end_src
+** Transclusion
+#+begin_src emacs-lisp
+;; Recommended transclusion config
+(use-package! org-transclusion
+  :defer
+  :after org
+  :init
+  (map!
+   :map global-map "<f12>" #'org-transclusion-add
+   :leader
+   :prefix "n"
+   :desc "Org Transclusion Mode" "t" #'org-transclusion-mode))
+#+end_src
+#+begin_src emacs-lisp
+;; Recommended transclusion config
+(use-package! org-transclusion
+  :defer
+  :after org
+  :init
+  (map!
+   :map global-map "<f12>" #'org-transclusion-add
+   :leader
+   :prefix "n"
+   :desc "Org Transclusion Mode" "t" #'org-transclusion-mode))
+#+end_src
+** Noter
+#+begin_src emacs-lisp
+(after! org-noter
+  (setq
+   ;; The WM can handle splits. Unable to get code blocks to execute when enabling this.
+   org-noter-notes-window-location 'other-frame
+   ;; Please stop opening frames
+   org-noter-always-create-frame nil
+   ;; I want to see the whole file
+   org-noter-hide-other nil
+   ;; Org noter default file path
+   org-noter-notes-search-path "~/Dropbox/Org/roam/notes/"))
+#+end_src
+** Time management
+#+begin_src emacs-lisp
+(after! org
+  (setq org-clock-into-drawer t)
+  (setq org-log-done t)
+  (setq org-log-into-drawer t)
+  ;; Agenda clock report parameters
+  (setq org-agenda-clockreport-parameter-plist
+        '(:link t :maxlevel 6 :fileskip0 t :compact t :narrow 60 :score 0))
+  ;; If idle for more than 15 minutes, resolve the things by asking what to do
+  ;; with the clock time
+  (setq org-clock-idle-time 15)
+  ;; Resume clocking task when emacs is restarted
+  (org-clock-persistence-insinuate)
+  ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+  (setq org-clock-persist t)
+  ;; Resume clocking task on clock-in if the clock is open
+  (setq org-clock-in-resume t)
+  ;; Do not prompt to resume an active clock, just resume it
+  (setq org-clock-persist-query-resume nil)
+  ;; Change tasks to whatever when clocking in
+  (setq org-clock-in-switch-to-state "NOW")
+  ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+  ;; with 0:00 duration
+  (setq org-clock-out-remove-zero-time-clocks t)
+  ;; Clock out when moving task to a done state
+  (setq org-clock-out-when-done t)
+  ;; Enable auto clock resolution for finding open clocks
+  (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+  ;; Include current clocking task in clock reports
+  (setq org-clock-report-include-clocking-task t)
+  ;; use pretty things for the clocktable
+  (setq org-pretty-entities t))
+#+end_src
+** ToDo
+#+begin_src emacs-lisp
+(after! org
+  (setq org-todo-keywords
+        '((sequence
+           "PROJ(p)"   ; Project
+           "IDEA(i)"   ; An idea
+           "TODO(t)"   ; A task that needs doing
+           "NOW(n)"   ; Task is in progress
+           "HOLD(h@/!)"   ; Task is being held up or paused
+           "WAIT(w@/!)"   ; Task delegated
+           "|"
+           "DONE(d!)"   ; Task was completed
+           "KILL(k@)"   ; Task was cancelled, aborted or is no longer applicable
+           )
+          ;; (sequence
+          ;;  "|"
+          ;;  "OKAY(o)"
+          ;;  "YES(y)"
+          ;;  "NO(n)")
+          ))
+  (setq org-todo-repeat-to-state t))
+#+end_src
+*** Count done
+#+begin_src emacs-lisp
+;;;  Orgmode count done
+;;;-----------------------------------------------------------------------------
+(after! org
+  (defun +my/count-done ()
+    (interactive)
+    (save-excursion
+      ;; we need to end up *before* the start of the drawer in order
+      ;; to parse it correctly, so we back up one line from where org-log-beginning tells us.
+      (goto-char (org-log-beginning))
+      (forward-line -1)
+      (let ((contents (cadr (org-element-drawer-parser nil nil))))
+        (count-lines (plist-get contents :contents-begin)
+                     (plist-get contents :contents-end)))))
+
+  (defun +my/put-count ()
+    (interactive)
+    (let ((count (+my/count-done)))
+      (org-entry-put (point) "DONE-COUNT" (format "%d" count))))
+
+  (map! :localleader
+        :map org-mode-map
+        :prefix ("d")
+        :desc "Put rep count" "p" '+my/put-count
+        ))
+#+end_src
+*** Strike done headline
+#+begin_src emacs-lisp
+;; Strike done headline
+(after! (:and org)
+  (setq org-fontify-done-headline t)
+  ;; A function for org done strikethrough
+  ;; (defun my-modes-themes-todo-strikethrough-faces ()
+  ;;   (custom-set-faces
+  ;;    '(org-done ((t (:foreground "PaleGreen"
+  ;;                    :weight normal
+  ;;                    :strike-through t))))
+  ;;    '(org-headline-done
+  ;;      ((((class color) (min-colors 16) (background dark))
+  ;;        (:foreground "LightSalmon" :strike-through t))))))
+
+  ;; Another function for org-done strike-through
+  (defun my-modes-themes-todo-strikethrough-faces ()
+    (set-face-attribute 'org-done nil :strike-through t)
+    (set-face-attribute 'org-headline-done nil :strike-through t :foreground "dimGrey")
+    )
+  ;; and here is the hook
+  (add-hook 'org-mode-hook #'my-modes-themes-todo-strikethrough-faces)
+  )
+#+end_src
+** Tags
+#+begin_src emacs-lisp
+(after! org
+  ;; Tags for org mode
+  (setq org-tag-alist '((:startgrouptag)
+                        ("Roam")
+                        (:grouptags)
+                        ("PLANNED" . ?0)
+                        ("STRUCTURED" . ?2)
+                        ("REVIEWING" . ?3)
+                        ("ZETTEL" . ?4)
+                        ("EVERGREEN" . ?5)
+                        (:endgrouptag)
+                        (:startgrouptag)
+                        ("Eisenhower")
+                        (:grouptags)
+                        ("important" . ?i)
+                        ("urgent"    . ?u)
+                        (:endgrouptag))))
+#+end_src
+** Properties
+*** Hide Drawer
+#+begin_src emacs-lisp
+(after! org
+  ;; Drawer use
+  (defun +my/org-hide-properties ()
+    "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+              "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+        (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+          (overlay-put ov_this 'invisible t)
+          (overlay-put ov_this 'hidden-prop-drawer t))))))
+#+end_src
+** Inline images
+#+begin_src emacs-lisp
+;; Enabling inline images by default
+;; Other settings for Inline Images.
+(after! org
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+  (setq +org-startup-with-animated-gifs "at-point")
+
+  ;; Add option to resize image in Org mode
+  (setq org-image-actual-width nil)
+  ;; Custom function to set backgroud colour of the inline images.
+  (load! "./lisp/my-inline-image-background.el")
+
+  ;; Using above defined "org-inline-image-background". Use code Below to set the image colour.
+  (setq my-inline-image-background "white")
+
+  ;; Enabling image scaling for linked image
+  (setq org-image-actual-width nil)
+  )
+#+end_src
+** Biblio
+*** Major config
+#+begin_src emacs-lisp
+(when IS-LINUX
+  (setq! citar-bibliography '("~/Dropbox/Org/MyLibrary-linux.bib")))
+(when IS-MAC
+  (setq! citar-bibliography '("~/Dropbox/Org/MyLibrary-mac.bib")))
+(when IS-WINDOWS
+  (setq! citar-bibliography '("~/Dropbox/Org/MyLibrary-windows.bib")))
+(setq! citar-library-paths '("~/Dropbox/Org/roam/PDFs/")
+       citar-notes-paths '("~/Dropbox/Org/roam/notes/"))
+(setq org-cite-csl-styles-dir "~/Zotero/styles")
+#+end_src
+*** Look and feel
+#+begin_src emacs-lisp
+;; Better UI
+(setq citar-symbols
+      `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+        (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+        (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+(setq citar-symbol-separator "  ")
+
+;; Template for UI
+(setq citar-templates
+      '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
+        (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+        (note . "Notes on ${author editor}, ${title}")))
+#+end_src
+* Languages
+** Spelling
+#+begin_src emacs-lisp
+;;; Ispell personal dictionary
+;;; -----------------------------------------------------------------------------
+(after! flyspell
+  (setq ispell-personal-dictionary (concat org-roam-directory "/personal_dict.txt"))
+  (setq ispell-dictionary "en_GB")
+  )
+(after! spell-fu
+  (setq spell-fu-idle-delay 0.5 ; default is 0.25
+        ;; ispell-personal-dictionary (concat org-roam-directory "/personal_dict.txt")
+        ;; ispell-dictionary "en_GB" ; needed for Macs in particular
+        ))
+#+end_src
+** Python
+I use ~conda~ for python environment management.
+As part of configuration, I create an environment named ~default~ to use as the default used environment. I don't modify the ~base~ environment ever.
+#+begin_src emacs-lisp
+(after! conda
+  ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
+  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
+  (conda-env-initialize-interactive-shells)
+  ;; if you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; if you want auto-activation (see below for details), include:
+  (conda-env-autoactivate-mode t)
+  ;; To activate conda on start
+  ;; (conda-env-activate "base")
+  (conda-env-activate "default"))
+#+end_src
+* Completion
+** Company
+#+begin_src emacs-lisp
+;; Company completion
+(after! company-box
+  (setq company-show-numbers t))
+#+end_src
+* PDF-tools
+#+begin_src emacs-lisp
+;; PDF view
+(after! pdf-view
+  ;; open pdfs scaled to fit page
+  (setq-default pdf-view-display-size 'fit-width)
+  ;; automatically annotate highlights
+  (setq pdf-annot-activate-created-annotations t
+        pdf-view-resize-factor 1.1)
+  ;; faster motion
+  (map!
+   :map pdf-view-mode-map
+   :n "g g"          #'pdf-view-first-page
+   :n "G"            #'pdf-view-last-page
+   :n "N"            #'pdf-view-next-page-command
+   :n "E"            #'pdf-view-previous-page-command
+   :n "e"            #'evil-collection-pdf-view-previous-line-or-previous-page
+   :n "n"            #'evil-collection-pdf-view-next-line-or-next-page
+   :localleader
+   (:desc "Insert note" "i" #'org-noter-insert-note
+    :desc "Insert precise note" "p" #'org-noter-insert-precise-note
+    :desc "Toggle note" "t" #'org-noter-insert-note-toggle-no-questions)))
+#+end_src
+
+Keybinding to kill org-noter in PDF
+#+begin_src emacs-lisp
+(after! org-noter
+  (map!
+   :map pdf-view-mode-map
+   :localleader
+   (:desc "Kill note" "k" #'org-noter-kill-session)))
+#+end_src
+* OS specific configurations
+** Windows
+#+begin_src emacs-lisp
+;; Disable the system cursor caused by screen reader etc.
+(when IS-WINDOWS
+  (setq w32-use-visible-system-caret nil))
+#+end_src

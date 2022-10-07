@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ref-start
+# key: ref-start
+# condition: t
+# --
+#+cite_export: csl ~/.emacs.d/csl/modern-language-association-8th-edition.csl
+#+bibliography: ~/Documents/org-database/roam/bibliographic/master-lib.bib
