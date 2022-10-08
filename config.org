@@ -146,8 +146,7 @@ All directory and file configurations used for
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(use-package modus-themes
-  :ensure
+(use-package! modus-themes
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
