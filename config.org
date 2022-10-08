@@ -1,7 +1,9 @@
 #+TITLE: Configurations for Doom Emacs
+#+AUTHOR: Alen Alex Ninan
 #+STARTUP: content
-
+#+STARTUP: num
 This is the configuration in Doom Emacs that I use. I use Emacs as an IDE and as my second brain. It's an extensively customizable and extendable tool which help with
+
 * Initial configurations
 #+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
@@ -363,44 +365,6 @@ Is relative to `org-directory', unless it is absolute")
   ;;   )
   )
 #+end_src
-** Roam
-Using org-roam for the data management and as my second brain.
-#+begin_src emacs-lisp
-(after! org-roam
-  ;; (setq org-roam-db-location (concat org-roam-directory "org-roam.db"))
-  (setq org-roam-dailies-directory "daily/")
-  ;; (setq org-roam-mode-sections
-  ;;     '((org-roam-backlinks-section :unique t)
-  ;;       org-roam-reflinks-section))
-  )
-#+end_src
-*** Capture
-#+begin_src emacs-lisp
-
-#+end_src
-*** UI for graphing links
-#+begin_src emacs-lisp
-;; Org-roam-ui
-;; ------------------------------------------------------------------------------
-(use-package! org-roam-ui
-  :after org-roam
-  ;; or :after org
-  ;;    :hook
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t)
-  (map! (:map org-mode-map
-         :localleader
-         :prefix ("mu" . "UI")
-         "o" #'org-roam-ui-mode
-         "f" #'org-roam-ui-follow-mode)))
-#+end_src
 ** Agenda
 #+begin_src emacs-lisp
 ;;; Agenda view custom commands
@@ -658,7 +622,7 @@ Using org-roam for the data management and as my second brain.
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
         ;; ispell-personal-dictionary (concat org-roam-directory "/personal_dict.txt")
-        ;; ispell-dictionary "en_GB" ; needed for Macs in particular
+        ispell-dictionary "en_GB" ; needed for Macs in particular
         ))
 #+end_src
 ** Python
@@ -723,4 +687,55 @@ Keybinding to kill org-noter in PDF
 ;; Disable the system cursor caused by screen reader etc.
 (when IS-WINDOWS
   (setq w32-use-visible-system-caret nil))
+#+end_src
+* Brain dump and second brain
+** Denote
+** Roam
+Using org-roam for the data management and as my second brain.
+#+begin_src emacs-lisp
+(after! org-roam
+  ;; (setq org-roam-db-location (concat org-roam-directory "org-roam.db"))
+  (setq org-roam-dailies-directory "daily/")
+  ;; (setq org-roam-mode-sections
+  ;;     '((org-roam-backlinks-section :unique t)
+  ;;       org-roam-reflinks-section))
+  )
+#+end_src
+*** Capture
+#+begin_src emacs-lisp
+
+#+end_src
+*** UI for graphing links
+#+begin_src emacs-lisp
+;; Org-roam-ui
+;; ------------------------------------------------------------------------------
+(use-package! org-roam-ui
+  :after org-roam
+  ;; or :after org
+  ;;    :hook
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+  (map! (:map org-mode-map
+         :localleader
+         :prefix ("mu" . "UI")
+         "o" #'org-roam-ui-mode
+         "f" #'org-roam-ui-follow-mode)))
+#+end_src
+* Miscellaneous
+** Timestamp on save
+Option to add timestamp onto a file on save.
+#+begin_src emacs-lisp
+(add-hook! 'before-save-hook #'time-stamp)
+#+end_src
+** Scratch buffer configuration
+Start the scratch buffer in fundamental mode. I use it for mainly random notes. List interface causes issues with my use case for the buffer.
+#+begin_src emacs-lisp
+(setq initial-major-mode 'fundamental-mode)
 #+end_src
