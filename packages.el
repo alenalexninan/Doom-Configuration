@@ -53,6 +53,10 @@
 (package! org-modern)
 (package! org-transclusion)
 (package! org-roam-ui)
+(package! org-roam-bibtex)
+
+;; Completion
+(package! citar-org-roam)
 
 ;; Some themes
 (package! modus-themes)

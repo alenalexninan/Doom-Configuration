@@ -703,7 +703,66 @@ Using org-roam for the data management and as my second brain.
 #+end_src
 *** Capture
 #+begin_src emacs-lisp
-
+(after! org-roam
+(setq org-roam-capture-templates
+        ;; Default capture template
+        '(
+          ("i" "inbox" plain
+           (file "~/.doom.d/org_capture_templates/roam_refile_template.org")
+           :target (file+head "inbox/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("d" "default" plain
+           (file "~/.doom.d/org_capture_templates/roam_default_template.org")
+           :target (file+head "${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("x" "bibliography reference" plain
+           (file "~/.doom.d/org_capture_templates/biblio-template.org")
+           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
+           :unnarrowed t
+           :immediate-finish t
+           :jump-to-captured t)
+          ("m" "Someday/Maybe" plain
+           (file "~/.doom.d/org_capture_templates/roam_default_template.org")
+           :target (file+head "someday/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("s" "structured" plain
+           (file "~/.doom.d/org_capture_templates/roam_structured_template.org")
+           :target (file+head "${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("e" "evergreeen" plain
+           (file "~/.doom.d/org_capture_templates/roam_default_template.org")
+           :target (file+head "evergreen/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("y" "encrypted" plain
+           (file "~/.doom.d/org_capture_templates/roam_default_template.org")
+           :target (file+head "encrypted/${slug}.org.gpg"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          )
+        )
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain
+           (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
+           :target (file+head "inbox/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)))
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* TODO Plan for the day\n* TODO Gratitude\n %?\n* TODO Daily Review"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n")))))
 #+end_src
 *** UI for graphing links
 #+begin_src emacs-lisp
@@ -727,6 +786,98 @@ Using org-roam for the data management and as my second brain.
          :prefix ("mu" . "UI")
          "o" #'org-roam-ui-mode
          "f" #'org-roam-ui-follow-mode)))
+#+end_src
+*** Keybindings
+#+begin_src emacs-lisp
+(after! org-roam
+  (map! (:map org-mode-map
+         :localleader
+         :prefix "m"
+         (:prefix ("b" . "Roam database actions")
+          :desc "Database clear" "c" #'org-roam-db-clear-all
+          :desc "Database update" "u" #'org-roam-db-sync)
+         )))
+#+end_src
+*** Roam files in org-agenda
+#+begin_src emacs-lisp
+;; Custom org-agenda based on "PLANNED" tags in org-roam
+;; The buffer you put this code in must have lexical-binding set to t!
+;; See the final configuration at the end for more details.
+
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (delete-duplicates (mapcar #'org-roam-node-file
+                             (seq-filter
+                              (my/org-roam-filter-by-tag tag-name)
+                              (org-roam-node-list))) :test #'string-equal))
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive)
+  (setq org-agenda-files (append (directory-files-recursively org-directory "\.org$") (my/org-roam-list-notes-by-tag "PLANNED")))
+  (setq org-agenda-files (delete-dups org-agenda-files))
+  )
+
+;; Build the agenda list the firt time for the session
+(add-hook 'org-agenda-mode-hook 'my/org-roam-refresh-agenda-list)
+#+end_src
+*** References
+**** Org-roam-bibtex
+Configuring org-roam to help with reference management in Roam database.
+#+begin_src emacs-lisp
+(use-package! org-roam-bibtex
+  :after (:all org-roam)
+  :config
+  (setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file" "year" "doi" "entry-type" "date"))
+  (setq orb-process-file-keyword t
+        orb-file-field-extensions '("pdf")
+        ;; orb-note-actions-interface 'ivy
+        ;; orb-insert-interface 'ivy-bibtex
+        )
+  (setq orb-roam-ref-format 'org-cite)
+  (org-roam-bibtex-mode))
+#+end_src
+**** Citar-org-roam
+For citar to seamlessly work with org-roam.
+#+begin_src emacs-lisp
+(use-package! citar-org-roam
+  :after citar org-roam
+  :config
+  (citar-register-notes-source
+   'orb-citar-source (list :name "Org-Roam Notes"
+                           :category 'org-roam-node
+                           :items #'citar-org-roam--get-candidates
+                           :hasitems #'citar-org-roam-has-notes
+                           :open #'citar-org-roam-open-note
+                           :create #'orb-citar-edit-note
+                           :annotate #'citar-org-roam--annotate))
+  (citar-org-roam-mode)
+  (setq citar-default-action 'citar-open-notes))
+#+end_src
+*** TODO Copy done to roam dailies
+#+begin_src emacs-lisp
+;; Copy done to dailies for the day
+;; (defun my/org-roam-copy-todo-to-today ()
+;;   (interactive)
+;;   (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+;;         (org-roam-dailies-capture-templates
+;;          '(("t" "tasks" entry "%?"
+;;             :if-new (file+head+olp "%<%Y-%m-%d>.org" "%<%Y-%m-%d>\n" ("Tasks")))))
+;;         (org-after-refile-insert-hook #'save-buffer)
+;;         today-file
+;;         pos)
+;;     (save-window-excursion
+;;       (org-roam-dailies--capture (current-time) t)
+;;       (setq today-file (buffer-file-name))
+;;       (setq pos (point)))
+;;     ;; Only refile if the target file is different than the current file
+;;     (unless (equal (file-truename today-file)
+;;                    (file-truename (buffer-file-name)))
+;;       (org-refile nil nil (list "Tasks" today-file nil pos)))))
+;; (add-to-list 'org-after-todo-state-change-hook
+;;              (lambda ()
+;;                (when (equal org-state "DONE")
+;;                  (my/org-roam-copy-todo-to-today))))
 #+end_src
 * Miscellaneous
 ** Timestamp on save
